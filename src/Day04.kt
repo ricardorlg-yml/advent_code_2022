@@ -9,21 +9,21 @@ fun main() {
         }
     }
 
-    fun String.toPoint(): Section {
+    fun String.toSection(): Section {
         val (x, y) = split("-").map { it.toInt() }
         return Section(x, y)
     }
 
     fun part1(input: List<String>): Int {
         return input.count { l ->
-            val (a, b) = l.split(",").map { it.toPoint() }
+            val (a, b) = l.split(",").map { it.toSection() }
             a fullyContains b || b fullyContains a
         }
     }
 
     fun part2(input: List<String>): Int {
         return input.count { l ->
-            val (a, b) = l.split(",").map { it.toPoint() }
+            val (a, b) = l.split(",").map { it.toSection() }
             a overlaps b || b overlaps a
         }
     }
