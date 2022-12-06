@@ -19,23 +19,21 @@ data class CrateMove(val howMany: Int, val from: Int, val to: Int)
 fun main() {
 
     val moveRegex = "move (\\d+) from (\\d+) to (\\d+)".toRegex()
+
     fun parseInput(input: List<String>): Pair<List<CrateStack>, List<CrateMove>> {
-        val (inputMoves, inputCrateStacksData) = input.partition { it.matches(moveRegex) }
-        val lastValidInput = inputCrateStacksData.withIndex().last { it.value.isNotBlank() }
-        val totalStackCrates = lastValidInput.value.split(" ").filter { it.isNotEmpty() }.size
-        val cratesStackInitialStateData = inputCrateStacksData.subList(0, lastValidInput.index + 1)
-        val crates = mutableListOf<CrateStack>()
-        for (i in 0 until totalStackCrates) {
-            cratesStackInitialStateData.fold("") { acc, s ->
-                s.getOrNull(i * 4 + 1)
+        val (inputMoves, inputStacksData) = input.partition { it.matches(moveRegex) }
+        val stacks = inputStacksData.takeWhile { it.contains("[") }
+
+        val crates = (1..stacks.last().length step 4).map { i ->
+            stacks.fold("") { acc, s ->
+                s.getOrNull(i)
                     .let {
-                        if (it == null || !it.isLetter()) acc
+                        if (it == null || !it.isUpperCase()) acc
                         else it + acc
                     }
-            }.apply {
-                if (isNotEmpty()) crates.add(CrateStack(this))
-            }
+            }.let { CrateStack(it) }
         }
+
 
         val moves = inputMoves.mapNotNull {
             moveRegex
