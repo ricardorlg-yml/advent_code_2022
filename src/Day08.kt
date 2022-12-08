@@ -1,7 +1,7 @@
 import Day08Solver.Direction.*
 
 class Day08Solver(private val input: List<List<Int>>, private val size: Int = input.size) {
-    enum class Direction { LEFT, RIGHT, UP, DOWN }
+    private enum class Direction { LEFT, RIGHT, UP, DOWN }
 
     private fun generateNeighbours(direction: Direction, row: Int, col: Int): Sequence<Int> {
         val range = when (direction) {
@@ -62,17 +62,17 @@ class Day08Solver(private val input: List<List<Int>>, private val size: Int = in
         return result
     }
 
-    private fun countVisibleTrees(neighbors: Sequence<Int>, current: Int): Int {
-        var score = 0
-        for (neighbor in neighbors) {
-            if (neighbor >= current) {
-                score++
+    private fun countVisibleTrees(trees: Sequence<Int>, current: Int): Int {
+        var visibleTrees = 0
+        for (tree in trees) {
+            if (tree >= current) {
+                visibleTrees++
                 break
             } else {
-                score++
+                visibleTrees++
             }
         }
-        return score
+        return visibleTrees
     }
 }
 
@@ -80,9 +80,7 @@ class Day08Solver(private val input: List<List<Int>>, private val size: Int = in
 fun main() {
 
     fun parseInput(input: List<String>): List<List<Int>> {
-        return input.map { line ->
-            line.split("").mapNotNull { it.toIntOrNull() }
-        }
+        return input.map { line -> line.split("").mapNotNull { it.toIntOrNull() } }
     }
 
     val testInput = parseInput(readInput("Day08_test"))
