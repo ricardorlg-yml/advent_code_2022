@@ -19,3 +19,17 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
     .padStart(32, '0')
 
 fun String.removeSpaces() = replace(" ", "")
+
+fun Int.pow(b: Int): Int {
+    var _a = this
+    var _b = b
+    var r = 1
+    while (_b > 0) {
+        if (_b and 1 == 1) {
+            r *= _a
+        }
+        _b = _b shr 1
+        _a *= _a
+    }
+    return r
+}

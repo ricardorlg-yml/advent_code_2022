@@ -80,7 +80,7 @@ class Day08Solver(private val input: List<List<Int>>, private val size: Int = in
 fun main() {
 
     fun parseInput(input: List<String>): List<List<Int>> {
-        return input.map { line -> line.split("").mapNotNull { it.toIntOrNull() } }
+        return input.map { line -> line.map { it.digitToInt() }}
     }
 
     val testInput = parseInput(readInput("Day08_test"))
