@@ -3,7 +3,7 @@ import kotlin.math.sign
 class Day09Solver(input: List<String>) {
 
     data class Knot(val isTail: Boolean, var knotX: Int = 0, var knotY: Int = 0) {
-        fun moveKnot(direction: String) {
+        infix fun moveTo(direction: String) {
             when (direction) {
                 "U" -> knotY -= 1
                 "D" -> knotY += 1
@@ -12,11 +12,11 @@ class Day09Solver(input: List<String>) {
             }
         }
 
-        fun touchKnot(other: Knot): Boolean {
-            return (other.knotX - knotX).pow(2) + (other.knotY - knotY).pow(2) <= 2
+        infix fun isAwayFrom(other: Knot): Boolean {
+            return (other.knotX - knotX).pow(2) + (other.knotY - knotY).pow(2) > 2
         }
 
-        fun moveTo(other: Knot) {
+        infix fun moveTo(other: Knot) {
             val dx = (other.knotX - knotX).sign
             val dy = (other.knotY - knotY).sign
             knotX += dx
@@ -24,41 +24,36 @@ class Day09Solver(input: List<String>) {
         }
     }
 
-    private tailrec fun move(
-        knots: List<Knot>,
+    private tailrec fun moveKnots(
+        rope: List<Knot>,
         direction: String,
         moveHead: Boolean = true,
         visited: MutableSet<Knot>,
     ) {
-        val head = knots[0]
-        val next = if(head.isTail) return else knots[1]
+        val head = rope[0]
+        val next = if (head.isTail) return else rope[1]
         if (moveHead) {
-            head.moveKnot(direction)
+            head moveTo direction
         }
-        if (!head.touchKnot(next)) {
-            next.moveTo(head)
+        if (next isAwayFrom head) {
+            next moveTo head
             if (next.isTail)
                 visited.add(next.copy())
-            move(knots.drop(1), direction, false, visited)
+            moveKnots(rope.drop(1), direction, false, visited)
         }
     }
 
-    private val motions = input.map {
-        it.split(" ")
-            .run {
-                get(0) to get(1).toInt()
-            }
-    }
+    private val movements = input.map { it.substringBefore(" ") to it.substringAfter(" ").toInt() }
 
     fun solve(totalKnots: Int): Int {
-        val response = hashSetOf<Knot>()
-        val knots = (1..totalKnots).map { knot -> Knot(knot == totalKnots) }
-        motions.forEach { (dir, amount) ->
-            repeat(amount) {
-                move(knots, dir, visited = response)
+        val visitedKnotsByTail = hashSetOf<Knot>()
+        val rope = (1..totalKnots).map { knot -> Knot(knot == totalKnots) }
+        movements.forEach { (direction, times) ->
+            repeat(times) {
+                moveKnots(rope, direction, visited = visitedKnotsByTail)
             }
         }
-        return response.size + 1
+        return visitedKnotsByTail.size + 1
     }
 }
 
