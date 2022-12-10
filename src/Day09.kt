@@ -1,3 +1,4 @@
+import kotlin.math.abs
 import kotlin.math.sign
 
 class Day09Solver(input: List<String>) {
@@ -13,7 +14,7 @@ class Day09Solver(input: List<String>) {
         }
 
         infix fun isAwayFrom(other: Knot): Boolean {
-            return (other.knotX - knotX).pow(2) + (other.knotY - knotY).pow(2) > 2
+            return abs(knotX - other.knotX) > 1 || abs(knotY - other.knotY) > 1
         }
 
         infix fun moveTo(other: Knot) {
@@ -46,7 +47,7 @@ class Day09Solver(input: List<String>) {
     private val movements = input.map { it.substringBefore(" ") to it.substringAfter(" ").toInt() }
 
     fun solve(totalKnots: Int): Int {
-        val visitedKnotsByTail = hashSetOf<Knot>()
+        val visitedKnotsByTail = mutableSetOf<Knot>()
         val rope = (1..totalKnots).map { knot -> Knot(knot == totalKnots) }
         movements.forEach { (direction, times) ->
             repeat(times) {

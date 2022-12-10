@@ -2,6 +2,9 @@ import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 
+const val ANSI_RESET = "\u001B[0m"
+const val  BLACK_BOLD = "\u001B[1;30m"
+
 /**
  * Reads lines from the given input txt file.
  */
