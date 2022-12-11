@@ -41,20 +41,20 @@ class Day10Solver(private val input: List<String>) {
     }
 
     fun solvePart2() {
-        val crt = " ".repeat(240).toMutableList()//point makes it difficult to see the pattern
         val instructions = parseInput()
         val registry = mutableMapOf<Int, Int>()
         loadRegistry(instructions, registry)
-        (0 until 240).forEach {
-            val spritePos = registry[it + 1]!!
-            val crtPos = it % 40
-            if (crtPos >= spritePos - 1 && crtPos <= spritePos + 1) {
-                crt[it] = '#'
+        (0 until 240)
+            .chunked(40)
+            .joinToString("\n") {
+                it.joinToString("") { i ->
+                    val sp = registry[i + 1]!!
+                    val crtPos = i % 40
+                    "#".takeIf { crtPos >= sp - 1 && crtPos <= sp + 1 } ?: " "
+                }
+            }.also {
+                println(BLACK_BOLD + it + ANSI_RESET)
             }
-        }
-        crt.chunked(40).forEach {
-            println(BLACK_BOLD + it.joinToString("") + ANSI_RESET)
-        }
     }
 }
 
