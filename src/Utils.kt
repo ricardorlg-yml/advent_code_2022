@@ -3,7 +3,9 @@ import java.math.BigInteger
 import java.security.MessageDigest
 
 const val ANSI_RESET = "\u001B[0m"
-const val  BLACK_BOLD = "\u001B[1;30m"
+const val BLACK_BOLD = "\u001B[1;30m"
+
+val signs = listOf(-1 to -1, -1 to 1, 1 to -1, 1 to 1)
 
 /**
  * Reads lines from the given input txt file.
